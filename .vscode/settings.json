@@ -1,0 +1,9 @@
+{
+  "github.copilot.chat.mcp.servers": {
+    "calculator": {
+      "command": "fastmcp",
+      "args": ["run", "server.py"],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
