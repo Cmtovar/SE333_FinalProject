@@ -731,3 +731,53 @@ def get_test_suggestion(methodName: str) -> str:
     
     # No specific pattern matched
     return "Write test covering all execution paths"
+
+@mcp.tool
+def str_replace(filePath: str, oldText: str, newText: str) -> str:
+    """
+    Replace text in a file. Useful for fixing placeholder assertions in generated tests.
+    
+    Args:
+        filePath: Path to file relative to codebase (e.g., "src/test/java/CalculatorTest.java")
+        oldText: Exact text to find and replace (can span multiple lines)
+        newText: Text to replace with
+        
+    Returns:
+        Success message with number of replacements made, or error message
+        
+    Example:
+        str_replace(
+            "src/test/java/com/example/CalculatorTest.java",
+            'assertEquals(0, result, "TODO: Specify expected value");',
+            'assertEquals(5, result, "2 + 3 should equal 5");'
+        )
+    """
+    try:
+        fullPath = CODEBASE_DIR / filePath
+        
+        # Check if file exists
+        if fullPath.exists() == False:
+            return f"Error: File not found at {fullPath}"
+        
+        # Read the current file content
+        with open(fullPath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if old text exists in file
+        if oldText not in content:
+            return f"Error: Text to replace not found in {filePath}\nLooked for: {oldText[:100]}..."
+        
+        # Count occurrences before replacement
+        occurrenceCount = content.count(oldText)
+        
+        # Perform replacement
+        updatedContent = content.replace(oldText, newText)
+        
+        # Write back to file
+        with open(fullPath, 'w', encoding='utf-8') as f:
+            f.write(updatedContent)
+        
+        return f"Success: Replaced {occurrenceCount} occurrence(s) in {filePath}"
+        
+    except Exception as e:
+        return f"Error replacing text: {e}"
