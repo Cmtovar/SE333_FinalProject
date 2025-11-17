@@ -1484,4 +1484,52 @@ public class NumberUtilsTest {
             0);
     }
 
+    /**
+     * Test min/max for byte with edge cases (Byte.MAX_VALUE, Byte.MIN_VALUE, boundaries).
+     */
+    @Test
+    public void testMinMaxByteEdgeCases() {
+        // ARRANGE: Test data with byte boundary values
+        
+        // ACT & ASSERT: Test byte min with boundary values
+        assertEquals("min(byte,byte,byte) with Byte.MAX_VALUE",
+            Byte.MIN_VALUE,
+            NumberUtils.min(Byte.MAX_VALUE, 0, Byte.MIN_VALUE));
+        assertEquals("min(byte,byte,byte) with Byte.MAX_VALUE in different positions",
+            Byte.MIN_VALUE,
+            NumberUtils.min(Byte.MIN_VALUE, Byte.MAX_VALUE, 0));
+        
+        // ACT & ASSERT: Test byte max with boundary values
+        assertEquals("max(byte,byte,byte) with Byte.MAX_VALUE",
+            Byte.MAX_VALUE,
+            NumberUtils.max(Byte.MIN_VALUE, 0, Byte.MAX_VALUE));
+        assertEquals("max(byte,byte,byte) with Byte.MAX_VALUE in different positions",
+            Byte.MAX_VALUE,
+            NumberUtils.max(0, Byte.MAX_VALUE, Byte.MIN_VALUE));
+        
+        // ACT & ASSERT: Test with zero and negative numbers
+        assertEquals("min(byte,byte,byte) with -1 and 0",
+            -1,
+            NumberUtils.min(0, -1, 1));
+        assertEquals("max(byte,byte,byte) with -1 and 0",
+            1,
+            NumberUtils.max(0, -1, 1));
+        
+        // ACT & ASSERT: Test with all same values
+        assertEquals("min(byte,byte,byte) with all same values",
+            (byte)100,
+            NumberUtils.min((byte)100, (byte)100, (byte)100));
+        assertEquals("max(byte,byte,byte) with all same values",
+            (byte)100,
+            NumberUtils.max((byte)100, (byte)100, (byte)100));
+        
+        // ACT & ASSERT: Test with near-boundary values
+        assertEquals("min(byte,byte,byte) near boundaries",
+            Byte.MIN_VALUE + 1,
+            NumberUtils.min(Byte.MIN_VALUE + 1, 0, Byte.MAX_VALUE - 1));
+        assertEquals("max(byte,byte,byte) near boundaries",
+            Byte.MAX_VALUE - 1,
+            NumberUtils.max(Byte.MIN_VALUE + 1, 0, Byte.MAX_VALUE - 1));
+    }
+
 }
