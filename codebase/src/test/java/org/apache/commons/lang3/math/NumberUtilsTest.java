@@ -1532,4 +1532,52 @@ public class NumberUtilsTest {
             NumberUtils.max(Byte.MIN_VALUE + 1, 0, Byte.MAX_VALUE - 1));
     }
 
+    /**
+     * Test min/max for short with edge cases (Short.MAX_VALUE, Short.MIN_VALUE, boundaries).
+     */
+    @Test
+    public void testMinMaxShortEdgeCases() {
+        // ARRANGE: Test data with short boundary values
+        
+        // ACT & ASSERT: Test short min with boundary values
+        assertEquals("min(short,short,short) with Short.MAX_VALUE",
+            Short.MIN_VALUE,
+            NumberUtils.min(Short.MAX_VALUE, 0, Short.MIN_VALUE));
+        assertEquals("min(short,short,short) with Short.MAX_VALUE in different positions",
+            Short.MIN_VALUE,
+            NumberUtils.min(Short.MIN_VALUE, Short.MAX_VALUE, 0));
+        
+        // ACT & ASSERT: Test short max with boundary values
+        assertEquals("max(short,short,short) with Short.MAX_VALUE",
+            Short.MAX_VALUE,
+            NumberUtils.max(Short.MIN_VALUE, 0, Short.MAX_VALUE));
+        assertEquals("max(short,short,short) with Short.MAX_VALUE in different positions",
+            Short.MAX_VALUE,
+            NumberUtils.max(0, Short.MAX_VALUE, Short.MIN_VALUE));
+        
+        // ACT & ASSERT: Test with zero and negative numbers
+        assertEquals("min(short,short,short) with -1 and 0",
+            -1,
+            NumberUtils.min(0, -1, 1000));
+        assertEquals("max(short,short,short) with -1 and 0",
+            1000,
+            NumberUtils.max(0, -1, 1000));
+        
+        // ACT & ASSERT: Test with all same values
+        assertEquals("min(short,short,short) with all same values",
+            (short)1234,
+            NumberUtils.min((short)1234, (short)1234, (short)1234));
+        assertEquals("max(short,short,short) with all same values",
+            (short)1234,
+            NumberUtils.max((short)1234, (short)1234, (short)1234));
+        
+        // ACT & ASSERT: Test with near-boundary values
+        assertEquals("min(short,short,short) near boundaries",
+            (short)(Short.MIN_VALUE + 1),
+            NumberUtils.min((short)(Short.MIN_VALUE + 1), 0, (short)(Short.MAX_VALUE - 1)));
+        assertEquals("max(short,short,short) near boundaries",
+            (short)(Short.MAX_VALUE - 1),
+            NumberUtils.max((short)(Short.MIN_VALUE + 1), 0, (short)(Short.MAX_VALUE - 1)));
+    }
+
 }
