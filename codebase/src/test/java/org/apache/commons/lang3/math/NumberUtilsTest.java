@@ -1425,4 +1425,63 @@ public class NumberUtilsTest {
         assertEquals(100, NumberUtils.min(100, 100, 100));
     }
 
+    /**
+     * Test min/max for double and float arrays with edge cases (NaN, Infinity, negative zero).
+     */
+    @Test
+    public void testMinMaxDoubleFloatEdgeCases() {
+        // ARRANGE: Test data with special floating point values
+        
+        // ACT & ASSERT: Test min/max with Infinity for double arrays
+        assertEquals("min(double[]) with POSITIVE_INFINITY",
+            Double.NEGATIVE_INFINITY,
+            NumberUtils.min(new double[] { Double.POSITIVE_INFINITY, 0.0, Double.NEGATIVE_INFINITY }),
+            0);
+        assertEquals("max(double[]) with POSITIVE_INFINITY",
+            Double.POSITIVE_INFINITY,
+            NumberUtils.max(new double[] { Double.POSITIVE_INFINITY, 0.0, Double.NEGATIVE_INFINITY }),
+            0);
+        
+        // ACT & ASSERT: Test min/max with Infinity for float arrays
+        assertEquals("min(float[]) with POSITIVE_INFINITY",
+            Float.NEGATIVE_INFINITY,
+            NumberUtils.min(new float[] { Float.POSITIVE_INFINITY, 0.0f, Float.NEGATIVE_INFINITY }),
+            0);
+        assertEquals("max(float[]) with POSITIVE_INFINITY",
+            Float.POSITIVE_INFINITY,
+            NumberUtils.max(new float[] { Float.POSITIVE_INFINITY, 0.0f, Float.NEGATIVE_INFINITY }),
+            0);
+        
+        // ACT & ASSERT: Test min/max with negative zero vs positive zero
+        // Note: -0.0 == 0.0 in Java, but they are distinct bit patterns
+        assertEquals("min(double[]) with -0.0 and 0.0",
+            0.0,
+            NumberUtils.min(new double[] { 1.0, 0.0, -0.0 }),
+            0);
+        assertEquals("max(double[]) with -0.0 and 0.0",
+            1.0,
+            NumberUtils.max(new double[] { 1.0, 0.0, -0.0 }),
+            0);
+        
+        // ACT & ASSERT: Test min/max with negative zero vs positive zero for floats
+        assertEquals("min(float[]) with -0.0f and 0.0f",
+            0.0f,
+            NumberUtils.min(new float[] { 1.0f, 0.0f, -0.0f }),
+            0);
+        assertEquals("max(float[]) with -0.0f and 0.0f",
+            1.0f,
+            NumberUtils.max(new float[] { 1.0f, 0.0f, -0.0f }),
+            0);
+        
+        // ACT & ASSERT: Test min/max with very small numbers near zero
+        assertEquals("min(double[]) with very small positive numbers",
+            Double.MIN_VALUE,
+            NumberUtils.min(new double[] { Double.MIN_VALUE, 1e-308, 0.1 }),
+            0);
+        assertEquals("max(double[]) with very small positive numbers",
+            0.1,
+            NumberUtils.max(new double[] { Double.MIN_VALUE, 1e-308, 0.1 }),
+            0);
+    }
+
 }
