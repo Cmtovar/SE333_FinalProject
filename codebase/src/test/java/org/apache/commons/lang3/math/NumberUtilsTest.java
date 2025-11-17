@@ -1580,4 +1580,68 @@ public class NumberUtilsTest {
             NumberUtils.max((short)(Short.MIN_VALUE + 1), 0, (short)(Short.MAX_VALUE - 1)));
     }
 
+    /**
+     * Test min/max for 3-param double and float with edge cases (NaN, Infinity, negative zero).
+     */
+    @Test
+    public void testMinMaxThreeParamDoubleFloatEdgeCases() {
+        // ARRANGE: Test data with special floating point values
+        
+        // ACT & ASSERT: Test double min with Infinity and negative Infinity
+        assertEquals("min(double,double,double) with POSITIVE_INFINITY",
+            Double.NEGATIVE_INFINITY,
+            NumberUtils.min(Double.POSITIVE_INFINITY, 0.0, Double.NEGATIVE_INFINITY),
+            0);
+        assertEquals("min(double,double,double) with POSITIVE_INFINITY in middle",
+            Double.NEGATIVE_INFINITY,
+            NumberUtils.min(0.0, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY),
+            0);
+        
+        // ACT & ASSERT: Test double max with Infinity values
+        assertEquals("max(double,double,double) with POSITIVE_INFINITY",
+            Double.POSITIVE_INFINITY,
+            NumberUtils.max(Double.NEGATIVE_INFINITY, 0.0, Double.POSITIVE_INFINITY),
+            0);
+        assertEquals("max(double,double,double) with NEGATIVE_INFINITY",
+            0.0,
+            NumberUtils.max(Double.NEGATIVE_INFINITY, 0.0, -100.0),
+            0);
+        
+        // ACT & ASSERT: Test float min with Infinity values
+        assertEquals("min(float,float,float) with POSITIVE_INFINITY",
+            Float.NEGATIVE_INFINITY,
+            NumberUtils.min(Float.POSITIVE_INFINITY, 0.0f, Float.NEGATIVE_INFINITY),
+            0);
+        assertEquals("min(float,float,float) with all Infinity",
+            Float.NEGATIVE_INFINITY,
+            NumberUtils.min(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY),
+            0);
+        
+        // ACT & ASSERT: Test float max with Infinity values
+        assertEquals("max(float,float,float) with POSITIVE_INFINITY",
+            Float.POSITIVE_INFINITY,
+            NumberUtils.max(Float.NEGATIVE_INFINITY, 0.0f, Float.POSITIVE_INFINITY),
+            0);
+        assertEquals("max(float,float,float) with NEGATIVE_INFINITY",
+            0.0f,
+            NumberUtils.max(Float.NEGATIVE_INFINITY, 0.0f, -100.0f),
+            0);
+        
+        // ACT & ASSERT: Test double with negative zero vs positive zero
+        double minZeroResult = NumberUtils.min(1.0, 0.0, -0.0);
+        assertTrue("min(double,double,double) with -0.0 should return 0.0 or -0.0",
+            minZeroResult == 0.0);
+        double maxZeroResult = NumberUtils.max(-1.0, 0.0, -0.0);
+        assertTrue("max(double,double,double) with -0.0 should return 0.0 or -0.0",
+            maxZeroResult == 0.0);
+        
+        // ACT & ASSERT: Test float with negative zero vs positive zero
+        float minFloatZeroResult = NumberUtils.min(1.0f, 0.0f, -0.0f);
+        assertTrue("min(float,float,float) with -0.0f should return 0.0f or -0.0f",
+            minFloatZeroResult == 0.0f);
+        float maxFloatZeroResult = NumberUtils.max(-1.0f, 0.0f, -0.0f);
+        assertTrue("max(float,float,float) with -0.0f should return 0.0f or -0.0f",
+            maxFloatZeroResult == 0.0f);
+    }
+
 }
