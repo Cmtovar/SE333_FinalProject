@@ -1400,4 +1400,29 @@ public class NumberUtilsTest {
         assertTrue(Float.isNaN(NumberUtils.max(bF)));
     }
 
+    @Test
+    public void testMaxIntIntIntEdgeCases() {
+        // ARRANGE: Test data with edge cases
+        
+        // ACT & ASSERT: Test Integer.MAX_VALUE as largest
+        assertEquals(Integer.MAX_VALUE, NumberUtils.max(Integer.MAX_VALUE, 0, Integer.MIN_VALUE));
+        
+        // ACT & ASSERT: Test Integer.MAX_VALUE in different positions
+        assertEquals(Integer.MAX_VALUE, NumberUtils.max(0, Integer.MAX_VALUE, Integer.MIN_VALUE));
+        assertEquals(Integer.MAX_VALUE, NumberUtils.max(Integer.MIN_VALUE, 0, Integer.MAX_VALUE));
+        
+        // ACT & ASSERT: Test Integer.MIN_VALUE as smallest with positive numbers
+        assertEquals(Integer.MIN_VALUE, NumberUtils.min(Integer.MIN_VALUE, 1, 2));
+        assertEquals(Integer.MIN_VALUE, NumberUtils.min(1, Integer.MIN_VALUE, 2));
+        assertEquals(Integer.MIN_VALUE, NumberUtils.min(1, 2, Integer.MIN_VALUE));
+        
+        // ACT & ASSERT: Test with zero and negative numbers
+        assertEquals(0, NumberUtils.max(0, -1, -2));
+        assertEquals(-2, NumberUtils.min(-1, 0, -2));
+        
+        // ACT & ASSERT: Test with all same values
+        assertEquals(100, NumberUtils.max(100, 100, 100));
+        assertEquals(100, NumberUtils.min(100, 100, 100));
+    }
+
 }
